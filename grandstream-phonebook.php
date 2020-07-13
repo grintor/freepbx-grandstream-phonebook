@@ -44,7 +44,6 @@
 	header('Content-type: application/xml');
 	$xml_obj = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><AddressBook />');
 	foreach (DBQuery("SELECT * FROM userman_users a LEFT JOIN directory_entries b ON a.default_extension = b.foreign_id WHERE default_extension = foreign_id") as $x){
-                $ext = $x['default_extension'];
 		$Contact = $xml_obj->addChild('Contact');
 		$FirstName = $Contact->addChild('FirstName', $x['fname']);
 		$LastName = $Contact->addChild('LastName', $x['lname']);
