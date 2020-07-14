@@ -43,16 +43,20 @@
 	
 	header('Content-type: application/xml');
 	$xml_obj = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><AddressBook />');
-	foreach (DBQuery("select * from users") as $x){
-		$name = explode(" ", $x['name']);
+	foreach (DBQuery("SELECT * FROM userman_users a LEFT JOIN directory_entries b ON a.default_extension = b.foreign_id WHERE default_extension = foreign_id") as $x){
 		$Contact = $xml_obj->addChild('Contact');
-		$FirstName = $Contact->addChild('FirstName', $name[0]);
-		if ($name[1]){
-			$LastName = $Contact->addChild('LastName', $name[1]);
-		}
+		$FirstName = $Contact->addChild('FirstName', $x['fname']);
+		$LastName = $Contact->addChild('LastName', $x['lname']);
+		$IsPrimary = $Contact->addChild('IsPrimary','false');
+		$Primary = $Contact->addChild('Primary',0);
+		$Frequent = $Contact->addChild('Frequent',0);
+		$PhotoUrl = $Contact->addChild('PhotoUrl');
 		$Phone = $Contact->addChild('Phone');
-		$phonenumber = $Phone->addChild('phonenumber', $x['extension']);
+		$Phone->addAttribute('type','Work');
+		$phonenumber = $Phone->addChild('phonenumber', $x['default_extension']);
 		$accountindex = $Phone->addChild('accountindex', 1);
+		$Mail = $Contact->addChild('Mail', $x['email']);
+		$Mail->addAttribute('type','Work');
 	}
 	
 	print formatXML($xml_obj->asXML());
