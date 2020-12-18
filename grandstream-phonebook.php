@@ -19,7 +19,7 @@
 	function formatXML($xml){
 		$dom = new DOMDocument;
 		$dom->preserveWhiteSpace = FALSE;
-		$dom->loadXML($xml);
+		$dom->loadXML(utf8_encode($xml));
 		$dom->formatOutput = TRUE;
 		return $dom->saveXml();
 	}
